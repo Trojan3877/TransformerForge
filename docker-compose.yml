@@ -1,0 +1,38 @@
+version: "3.9"
+
+services:
+  forge-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: transformerforge-api
+    environment:
+      OPENAI_API_KEY: "sk-demo"
+      SNOWFLAKE_ACCOUNT: "local"
+      SNOWFLAKE_USER: "demo"
+      SNOWFLAKE_PASSWORD: "demo"
+      SNOWFLAKE_DATABASE: "FORGE_METRICS"
+      SNOWFLAKE_SCHEMA: "PUBLIC"
+      SNOWFLAKE_WAREHOUSE: "LOCAL_WH"
+      AWS_DEFAULT_REGION: "us-east-1"
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./:/app            # hot-reload for local dev
+    depends_on:
+      - db
+
+  db:
+    image: postgres:15-alpine      # Snowflake stand-in for local tests
+    container_name: forge-pg
+    environment:
+      POSTGRES_USER: demo
+      POSTGRES_PASSWORD: demo
+      POSTGRES_DB: forge_metrics
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+volumes:
+  pgdata:
