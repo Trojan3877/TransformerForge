@@ -1,0 +1,74 @@
+---
+# TransformerForge • Ansible Playbook
+# ------------------------------------------------------------
+# 1. Rotates K8s Secret containing OPENAI + Snowflake creds
+# 2. Deploys new Docker tag via Helm with a blue-green strategy
+#    (current release suffixed “-green”, new release “-blue”)
+#
+# Usage:
+#   ansible-playbook -i localhost, infra/ansible/deploy.yml \
+#     -e "image_tag=0.1.1 secret_file=.env.prod"
+# ------------------------------------------------------------
+
+- name: 🚀 Blue-Green deploy TransformerForge
+  hosts: localhost
+  connection: local
+  gather_facts: false
+
+  vars:
+    chart:        "../helm/transformerforge"
+    namespace:    "forge"
+    # vars overridable via -e
+    image_tag:    "0.1.1"
+    secret_file:  ".env.prod"          # key=value lines
+
+    current_color: "green"
+    new_color:     "blue"
+
+  tasks:
+
+  - name: 🔐 Create / rotate K8s Secret
+    kubernetes.core.k8s:
+      state: present
+      definition:
+        apiVersion: v1
+        kind: Secret
+        metadata:
+          name: transformerforge-secrets-{{ new_color }}
+          namespace: "{{ namespace }}"
+        type: Opaque
+        stringData: "{{ lookup('file', secret_file) | from_yaml }}"
+    register: secret_out
+
+  - name: 📥 Pull latest chart dependencies (if any)
+    shell: helm dependency update {{ chart }}
+
+  - name: ⛴  Deploy new (blue) release
+    shell: >
+      helm upgrade --install transformerforge-{{ new_color }} {{ chart }}
+      --namespace {{ namespace }} --create-namespace
+      --set image.tag={{ image_tag }}
+      --set env.OPENAI_API_KEY="{{ secret_out.resources[0].data.OPENAI_API_KEY | b64decode }}"
+      --set env.SNOWFLAKE_PASSWORD="{{ secret_out.resources[0].data.SNOWFLAKE_PASSWORD | b64decode }}"
+    register: helm_blue
+
+  - name: ⏳ Wait for rollout to finish
+    shell: kubectl rollout status deploy/transformerforge-{{ new_color }} -n {{ namespace }} --timeout=120s
+
+  - name: 🗑 Remove old (green) release
+    shell: helm uninstall transformerforge-{{ current_color }} -n {{ namespace }}
+    ignore_errors: true
+
+  - name: 🗑 Delete old secret
+    kubernetes.core.k8s:
+      state: absent
+      api_version: v1
+      kind: Secret
+      name: transformerforge-secrets-{{ current_color }}
+      namespace: "{{ namespace }}"
+      ignore_absent: true
+
+  - name: ✅ Deployment summary
+    debug:
+      msg: >
+        TransformerForge upgraded to {{ image_tag }} using blue-green strategy.
