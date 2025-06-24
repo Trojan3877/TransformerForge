@@ -32,6 +32,30 @@
 ![Flow-Chart](docs/flowchart.png)
 
 ---
+TransformerForge/
+├── .github/
+│   ├── workflows/    # ci.yml, container-scan.yml, ui-build.yml
+│   └── dependabot.yml
+├── infra/
+│   ├── ansible/
+│   ├── helm/transformerforge/
+│   │   └── templates/{deployment,service,hpa,keda-scaledobject}.yaml
+│   ├── terraform/    # eks + snowflake + helm
+│   └── otel/
+├── src/
+│   ├── python/       # train.py, inference.py, attention.py
+│   ├── cpp/          # fast_attention.cpp
+│   └── java/         # pom.xml + DataLoader.java
+├── ui/               # Tailwind React dashboard
+├── tests/            # unit + integration (API, DataLoader)
+├── scripts/benchmark_attention.py
+├── docs/
+│   ├── architecture.md • api_reference.md • metrics.md
+│   ├── flowchart.png  • openapi.json
+│   └── mkdocs.yml (root)
+├── Dockerfile • docker-compose.yml • Makefile
+├── .pre-commit-config.yaml • .dockerignore
+├── LICENSE • CHANGELOG.md • CONTRIBUTING.md • CODE_OF_CONDUCT.md
 
 ## 🚀 Quick Start
 
