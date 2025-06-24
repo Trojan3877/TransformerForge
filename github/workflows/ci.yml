@@ -1,0 +1,65 @@
+name: Build-Test-Coverage
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+
+    steps:
+    # ───────────────────────── 1. Checkout ──────────────────────────
+    - name: 📥 Checkout
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    # ───────────────────────── 2. JDK & Maven ───────────────────────
+    - name: ☕ Set up JDK 17
+      uses: actions/setup-java@v4
+      with:
+        distribution: temurin
+        java-version: "17"
+        cache: maven
+
+    - name: 🛠️ Build Java DataLoader
+      run: |
+        cd src/java
+        mvn -q package
+        echo "JAR built: $(ls target/*shaded.jar)"
+        cd ../../
+
+    # ───────────────────────── 3. C++ build ─────────────────────────
+    - name: ⚙️ Compile fast-attention shared library
+      run: |
+        g++ -O3 -std=c++17 -fPIC -shared src/cpp/fast_attention.cpp \
+            -o src/cpp/libfastattn.so
+
+    # ───────────────────────── 4. Python setup ──────────────────────
+    - name: 🐍 Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: "3.11"
+
+    - name: 📦 Install Python deps
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        pip install coverage pytest
+
+    # ───────────────────────── 5. Tests + coverage ──────────────────
+    - name: 🧪 Run tests
+      run: |
+        coverage run -m pytest -q
+        coverage xml -o coverage.xml
+
+    # ───────────────────────── 6. Codecov upload ────────────────────
+    - name: 📈 Upload to Codecov
+      uses: codecov/codecov-action@v3
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}
+        files: coverage.xml
+        verbose: true
