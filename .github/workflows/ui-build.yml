@@ -1,0 +1,47 @@
+name: UI-Build
+
+on:
+  push:
+    paths:
+      - "ui/**"
+      - ".github/workflows/ui-build.yml"
+  pull_request:
+    paths:
+      - "ui/**"
+
+jobs:
+  ui-build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [18, 20]   # verify against two LTS versions
+
+    steps:
+      - name: 📥 Checkout
+        uses: actions/checkout@v4
+
+      - name: 🟢 Setup Node ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: "npm"
+          cache-dependency-path: ui/package-lock.json
+
+      - name: 📦 Install deps
+        working-directory: ui
+        run: npm ci --silent
+
+      - name: 🧹 ESLint / Prettier
+        working-directory: ui
+        run: npx eslint src --max-warnings 0
+
+      - name: 🛠 Build dashboard
+        working-directory: ui
+        run: npm run build
+
+      - name: 🚀 Upload production build (artifact)
+        uses: actions/upload-artifact@v3
+        with:
+          name: ui-dist
+          path: ui/dist
