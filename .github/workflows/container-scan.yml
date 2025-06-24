@@ -1,0 +1,45 @@
+name: Container-Security-Scan
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  schedule:
+    - cron: '0 3 * * 1'   # every Monday 03:00 UTC
+
+jobs:
+  trivy-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 📥 Checkout
+        uses: actions/checkout@v4
+
+      # Build the Docker image (no cache, slim layers)
+      - name: 🏗 Build image for scan
+        run: |
+          docker build -t transformerforge-scan:ci .
+
+      # Run Trivy vulnerability scan
+      - name: 🔎 Trivy vuln scan
+        uses: aquasecurity/trivy-action@0.16.0
+        with:
+          image-ref: transformerforge-scan:ci
+          format: table
+          exit-code: 1          # fail CI on HIGH / CRITICAL vulns
+          ignore-unfixed: true
+          severity: CRITICAL,HIGH
+
+      # Generate SBOM SPDX and upload as artifact
+      - name: 📜 Generate SBOM (SPDX)
+        uses: aquasecurity/trivy-action@0.16.0
+        with:
+          image-ref: transformerforge-scan:ci
+          format: spdx-json
+          output: sbom.spdx.json
+
+      - name: 📤 Upload SBOM artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: SBOM
+          path: sbom.spdx.json
