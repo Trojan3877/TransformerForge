@@ -1,0 +1,30 @@
+# Core
+fastapi==0.111.0
+uvicorn[standard]==0.30.0
+pydantic==2.7.1
+python-multipart==0.0.9
+
+# NLP / Transformers
+transformers==4.39.3
+torch==2.2.2
+sentencepiece==0.1.99
+datasets==2.20.0
+
+# Metrics & Evaluation
+rouge-score==0.1.2
+nltk==3.8.1
+evaluate==0.4.2
+
+# Prometheus / OTEL
+prometheus-client==0.20.0
+opentelemetry-sdk==1.24.0
+opentelemetry-instrumentation-fastapi==0.44b0
+opentelemetry-exporter-otlp==1.24.0
+
+# Snowflake connector
+snowflake-connector-python==3.6.0
+
+# Testing
+pytest==8.2.0
+coverage==7.5.1
+fastapi[testclient]==0.111.0
