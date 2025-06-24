@@ -1,0 +1,16 @@
+apiVersion: v2
+name: transformerforge
+description: Helm chart for deploying TransformerForge (multi-language NLP service)
+type: application
+version: 0.1.0     # bump when chart changes
+appVersion: "0.1.0"  # Docker image tag
+icon: https://raw.githubusercontent.com/Trojan3877/TransformerForge/main/docs/flowchart.png
+keywords:
+  - transformer
+  - nlp
+  - rag
+  - llm
+  - mlops
+maintainers:
+  - name: Corey Leath
+    email: coreyleath10@gmail.com
