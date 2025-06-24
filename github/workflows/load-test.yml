@@ -1,0 +1,19 @@
+name: Load-Test
+
+on:
+  schedule:
+    - cron: '0 4 * * *'       # daily 04:00 UTC
+  workflow_dispatch: {}
+
+env:
+  TF_ENDPOINT: ${{ secrets.LOADTEST_URL }}   # prod endpoint
+
+jobs:
+  k6:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: 🏃 k6 test
+        uses: grafana/k6-action@v0.3.1
+        with:
+          filename: scripts/k6_summarize.js
