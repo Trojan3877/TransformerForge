@@ -1,0 +1,45 @@
+# ─────────────────────────────────────────────────────────────
+# TransformerForge • Helm values
+# Override any setting with: helm install … -f my_values.yaml
+# ─────────────────────────────────────────────────────────────
+
+replicaCount: 2
+
+image:
+  repository: trojan3877/transformerforge
+  tag: "0.1.0"
+  pullPolicy: IfNotPresent
+
+service:
+  type: ClusterIP
+  port: 8000
+
+resources:
+  requests:
+    cpu: 500m
+    memory: 1Gi
+  limits:
+    cpu: 2
+    memory: 4Gi
+
+autoscaling:
+  enabled: true
+  minReplicas: 2
+  maxReplicas: 6
+  targetCPUUtilizationPercentage: 70
+
+env:                           # injected as container ENV
+  OPENAI_API_KEY: ""
+  SNOWFLAKE_ACCOUNT: ""
+  SNOWFLAKE_USER: ""
+  SNOWFLAKE_DATABASE: "FORGE_METRICS"
+  SNOWFLAKE_SCHEMA: "PUBLIC"
+  SNOWFLAKE_WAREHOUSE: "COMPUTE_WH"
+  AWS_DEFAULT_REGION: "us-east-1"
+
+ingress:
+  enabled: false
+  className: ""
+  annotations: {}
+  hosts: []
+  tls: []
