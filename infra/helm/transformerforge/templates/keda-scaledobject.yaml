@@ -1,0 +1,29 @@
+{{- if .Values.keda.enabled }}
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  name: {{ include "transformerforge.fullname" . }}-keda
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "transformerforge.labels" . | nindent 4 }}
+spec:
+  scaleTargetRef:
+    name: {{ include "transformerforge.fullname" . }}
+  pollingInterval:  30        # seconds between metric checks
+  cooldownPeriod:   300       # seconds to wait before scale-in
+  minReplicaCount:  {{ .Values.autoscaling.minReplicas }}
+  maxReplicaCount:  {{ .Values.autoscaling.maxReplicas }}
+
+  triggers:
+    # ── HTTP RPS trigger via Prometheus ───────────────────────────────
+    - type: prometheus
+      metadata:
+        serverAddress: {{ .Values.keda.prometheus.server }}
+        metricName: http_requests_total
+        threshold: 50                 # scale out when RPS > 50
+        query: |
+          sum(rate(http_requests_total{
+            job="{{ include "transformerforge.fullname" . }}",
+            code=~"2.."
+          }[1m]))
+{{- end }}
