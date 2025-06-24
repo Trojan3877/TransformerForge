@@ -1,0 +1,59 @@
+repos:
+  # ---- Python ------------------------------------------------------
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.4.4
+    hooks: [id: ruff]
+
+  - repo: https://github.com/psf/black
+    rev: 24.4.2
+    hooks:
+      - id: black
+        language_version: python3.11
+
+  - repo: https://github.com/pre-commit/mirrors-mypy
+    rev: v1.10.0
+    hooks:
+      - id: mypy
+        args: [--ignore-missing-imports]
+
+  # ---- C++ clang-format --------------------------------------------
+  - repo: https://github.com/LucHermitte/clang-format-hook
+    rev: v12
+    hooks:
+      - id: clang-format-hook
+        files: \.(cpp|hpp|cc|h)$
+
+  # ---- Java google-java-format -------------------------------------
+  - repo: https://github.com/google/google-java-format
+    rev: v1.17.0
+    hooks:
+      - id: google-java-format
+        files: \.java$
+
+  # ---- JavaScript / React (Prettier) -------------------------------
+  - repo: https://github.com/pre-commit/mirrors-prettier
+    rev: v3.2.5
+    hooks:
+      - id: prettier
+        files: ui/.*\.(js|jsx|json|css)$
+
+  # ---- YAML & JSON lint -------------------------------------------
+  - repo: https://github.com/adrienverge/yamllint
+    rev: v1.35.1
+    hooks: [id: yamllint]
+
+  - repo: https://github.com/lyz-code/jsonlint
+    rev: v1.4.1
+    hooks: [id: jsonlint]
+
+  # ---- Detect secrets ---------------------------------------------
+  - repo: https://github.com/Yelp/detect-secrets
+    rev: v1.4.0
+    hooks: [id: detect-secrets]
+
+  # ---- Spell check (docs) -----------------------------------------
+  - repo: https://github.com/streetsidesoftware/cspell-cli
+    rev: v7.9.0
+    hooks:
+      - id: cspell
+        files: \.(md|rst)$
