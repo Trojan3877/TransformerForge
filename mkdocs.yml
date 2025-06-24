@@ -1,0 +1,40 @@
+site_name: TransformerForge Docs
+site_url: https://trojan3877.github.io/TransformerForge/
+repo_name: Trojan3877/TransformerForge
+repo_url: https://github.com/Trojan3877/TransformerForge
+edit_uri: blob/main/
+
+theme:
+  name: material
+  features:
+    - navigation.indexes
+    - navigation.sections
+    - content.code.copy
+    - content.tabs.link
+    - toc.follow
+
+nav:
+  - Overview: index.md
+  - Architecture: docs/architecture.md
+  - API Reference: docs/api_reference.md
+  - Metrics Dashboard: docs/metrics.md
+  - OpenAPI Spec: docs/openapi.json
+  - Changelog: CHANGELOG.md
+  - Contributing: CONTRIBUTING.md
+
+markdown_extensions:
+  - admonition
+  - footnotes
+  - toc:
+      permalink: true
+  - pymdownx.superfences
+  - pymdownx.tabbed
+  - pymdownx.highlight
+  - pymdownx.snippets
+
+plugins:
+  - search
+  - mkdocs-git-revision-date-localized
+  - mike:            # versioned docs (optional)
+      default_branch: gh-pages
+      default_version: latest
