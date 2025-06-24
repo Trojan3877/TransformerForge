@@ -15,6 +15,7 @@
 ![Container Scan](https://github.com/Trojan3877/TransformerForge/actions/workflows/container-scan.yml/badge.svg)
 ![Docs](https://img.shields.io/badge/Docs-GitHub%20Pages-informational?style=for-the-badge)
 ![Latency](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/Trojan3877/TransformerForge/main/docs/badges/latency.json&label=P95%20Latency&style=for-the-badge)
+![Dashboard preview](docs/dashboard.png)
 
 > **TransformerForge** is a production-grade template for **fine-tuning, serving, and continuously evaluating** large Transformers on summarization and retrieval-augmented generation.  
 > Python orchestrates SageMaker jobs; C++ flash-attention and Java Delta loaders boost performance; Docker → Helm → EKS deploys the stack. Metrics stream to Snowflake, dashboards run on Tailwind React, and blue-green upgrades happen via Ansible—meeting the engineering bar at OpenAI, Databricks, and Netflix.
