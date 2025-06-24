@@ -1,0 +1,107 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "TransformerForge API",
+    "version": "0.1.0",
+    "description": "HTTP endpoints for health check, Prometheus metrics, and text summarization."
+  },
+  "paths": {
+    "/": {
+      "get": {
+        "summary": "Health",
+        "operationId": "health",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": { "type": "string", "example": "ok" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/metrics": {
+      "get": {
+        "summary": "Prometheus Metrics",
+        "operationId": "metrics",
+        "responses": {
+          "200": {
+            "description": "Prometheus text format",
+            "content": {
+              "text/plain": {
+                "schema": { "type": "string" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/summarize": {
+      "post": {
+        "summary": "Summarize Text",
+        "operationId": "summarize",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "text": { "type": "string" },
+                  "max_length": { "type": "integer", "default": 128 },
+                  "min_length": { "type": "integer", "default": 30 }
+                },
+                "required": ["text"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful summary",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "summary": { "type": "string" }
+                  }
+                },
+                "examples": {
+                  "sample": {
+                    "value": { "summary": "TransformerForge turns data and models into code." }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Empty text error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Error" }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Error": {
+        "type": "object",
+        "properties": {
+          "detail": { "type": "string" }
+        }
+      }
+    }
+  }
+}
