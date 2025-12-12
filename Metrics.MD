@@ -39,5 +39,5 @@ TransformerForge is a **production-grade LLM system** using:
 ---
 
 ## Production Readiness
-**Overall Level:**  
-**L7 – AI Platform / LLM Systems Engineering**
+Overall Level: 
+L7 – AI Platform / LLM Systems Engineering
