@@ -1,84 +1,187 @@
-# ⚡ TransformerForge
+# 🔥 TransformerForge — Llama 3 + RAG LLM Platform
 
-![Capstone](https://img.shields.io/badge/Project-Capstone-blueviolet?style=for-the-badge)
-![Build](https://github.com/Trojan3877/TransformerForge/actions/workflows/ci.yml/badge.svg?style=for-the-badge)
-![Coverage](https://codecov.io/gh/Trojan3877/TransformerForge/branch/main/graph/badge.svg?style=for-the-badge)
-![Dependabot](https://img.shields.io/github/dependabot/updates/Trojan3877/TransformerForge?style=for-the-badge)
-![Scorecard](https://api.securityscorecards.dev/projects/github.com/Trojan3877/TransformerForge/badge?style=for-the-badge)
-![Telemetry](https://img.shields.io/badge/Telemetry-OTEL-green?style=for-the-badge)
-![Docs](https://img.shields.io/badge/Docs-GitHub%20Pages-informational?style=for-the-badge)
-[→ OpenAPI spec](docs/openapi.json) — import into Postman in one click
-![Build](…ci.yml…) 
-![UI Build](…ui-build.yml…) 
-![Container Scan](…container-scan.yml…)
-![UI Build](https://github.com/Trojan3877/TransformerForge/actions/workflows/ui-build.yml/badge.svg)
-![Container Scan](https://github.com/Trojan3877/TransformerForge/actions/workflows/container-scan.yml/badge.svg)
-![Docs](https://img.shields.io/badge/Docs-GitHub%20Pages-informational?style=for-the-badge)
-![Latency](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/Trojan3877/TransformerForge/main/docs/badges/latency.json&label=P95%20Latency&style=for-the-badge)
-![Dashboard preview](docs/dashboard.png)
-### PyPI (planned)
-
-```bash
-pip install transformerforge           # placeholder; ETA v1.0
-
-> **TransformerForge** is a production-grade template for **fine-tuning, serving, and continuously evaluating** large Transformers on summarization and retrieval-augmented generation.  
-> Python orchestrates SageMaker jobs; C++ flash-attention and Java Delta loaders boost performance; Docker → Helm → EKS deploys the stack. Metrics stream to Snowflake, dashboards run on Tailwind React, and blue-green upgrades happen via Ansible—meeting the engineering bar at OpenAI, Databricks, and Netflix.
+![Python](https://img.shields.io/badge/Python-3.10-blue)
+![Llama3](https://img.shields.io/badge/Llama%203-Meta-orange)
+![LangChain](https://img.shields.io/badge/LangChain-Orchestration-blue)
+![RAG](https://img.shields.io/badge/RAG-Enabled-brightgreen)
+![FAISS](https://img.shields.io/badge/FAISS-Vector%20Store-green)
+![FastAPI](https://img.shields.io/badge/FastAPI-API-success)
+![Docker](https://img.shields.io/badge/Docker-Ready-blue)
+![CI](https://github.com/Trojan3877/TransformerForge/actions/workflows/ci.yml/badge.svg)
+![License](https://img.shields.io/badge/License-MIT-lightgrey)
 
 ---
 
-## 🌟 Features  
-* **Multi-language core** — Python, C++, Java.  
-* **End-to-end MLOps** — Docker, Helm, Terraform, Ansible, CI/CD.  
-* **Observability first** — Prometheus metrics, OTEL traces, nightly Snowflake exports.  
-* **Quantifiable KPIs** — P95 latency < 60 ms, Rouge-L ≥ 0.45, cost/1kT tokens logged.
+## 🚀 Overview
+
+**TransformerForge** is a **production-grade Large Language Model (LLM) platform** designed to demonstrate how **modern AI systems are built in Big Tech**.
+
+It integrates:
+
+- **Llama 3 (Meta)** as the core LLM
+- **Retrieval-Augmented Generation (RAG)** for grounded responses
+- **LangChain** for orchestration and agent logic
+- **FAISS** for vector search
+- **FastAPI** for service exposure
+- **Docker + CI/CD** for production parity
+
+This repository focuses on **LLM systems engineering**, not toy demos.
 
 ---
 
-## 🏗 Architecture  
-![Flow-Chart](docs/flowchart.png)
+## 🧠 System Architecture
+User / API Request ↓ FastAPI Service Layer ↓ LLM Agent (LangChain) ↓ RAG Pipeline ├─ Vector Store (FAISS) ├─ Embeddings (Sentence Transformers) ↓ Llama 3 (Meta) ↓ Grounded Response
+---
+
+## 🧩 Key Features
+
+### 🔹 Llama 3 Integration
+- Meta-aligned open-weight LLM
+- Deterministic inference
+- Local or hosted deployment support
+
+### 🔹 Retrieval-Augmented Generation (RAG)
+- Document ingestion pipeline
+- FAISS vector indexing
+- Top-K semantic retrieval
+- Reduced hallucinations
+
+### 🔹 LangChain Orchestration
+- MCP-style agent design
+- Tool-based execution
+- Clear separation of reasoning vs execution
+
+### 🔹 FastAPI + Swagger
+- REST API interface
+- Auto-generated documentation
+- Deployment-ready service
+
+### 🔹 Production Tooling
+- Dockerized runtime
+- GitHub Actions CI
+- Automated testing
+- Environment parity (Python 3.10)
 
 ---
+
+## 🛠️ Tech Stack
+
+| Layer | Technology |
+|-----|-----------|
+| LLM | **Llama 3 (Meta)** |
+| Orchestration | LangChain |
+| RAG | FAISS |
+| Embeddings | Sentence-Transformers |
+| API | FastAPI |
+| CI/CD | GitHub Actions |
+| Containerization | Docker |
+| Language | Python 3.10 |
+
+---
+
+## 📂 Project Structure
+
+```text
 TransformerForge/
-├── .github/
-│   ├── workflows/    # ci.yml, container-scan.yml, ui-build.yml
-│   └── dependabot.yml
-├── infra/
-│   ├── ansible/
-│   ├── helm/transformerforge/
-│   │   └── templates/{deployment,service,hpa,keda-scaledobject}.yaml
-│   ├── terraform/    # eks + snowflake + helm
-│   └── otel/
 ├── src/
-│   ├── python/       # train.py, inference.py, attention.py
-│   ├── cpp/          # fast_attention.cpp
-│   └── java/         # pom.xml + DataLoader.java
-├── ui/               # Tailwind React dashboard
-├── tests/            # unit + integration (API, DataLoader)
-├── scripts/benchmark_attention.py
-├── docs/
-│   ├── architecture.md • api_reference.md • metrics.md
-│   ├── flowchart.png  • openapi.json
-│   └── mkdocs.yml (root)
-├── Dockerfile • docker-compose.yml • Makefile
-├── .pre-commit-config.yaml • .dockerignore
-├── LICENSE • CHANGELOG.md • CONTRIBUTING.md • CODE_OF_CONDUCT.md
+│   ├── llm/
+│   │   ├── llama_client.py
+│   │   ├── rag_pipeline.py
+│   │   └── agent.py
+│   ├── api.py
+│   └── config.py
+├── data/
+│   └── documents/
+├── vectorstore/
+├── tests/
+├── Metrics.md
+├── Dockerfile
+├── requirements.txt
+└── README.md
+📊 Metrics & Evaluation
 
-## 🚀 Quick Start
+Comprehensive system evaluation, RAG behavior analysis, and production readiness assessment are documented in:
 
-```bash
-make dev           # FastAPI hot-reload on :8000
-docker-compose up  # API + Postgres mock
-make helm-up       # Deploy to current K8s context
-
+➡ Metrics.md
 
 
+---
+
+▶️ Running the Project
+
+🔹 Local Setup
+
+pip install -r requirements.txt
+uvicorn src.api:app --reload
+
+🔹 Docker
+
+docker build -t transformerforge .
+docker run -p 8000:8000 transformerforge
+
+🔹 Swagger UI
+
+http://localhost:8000/docs
+
+
+
+🧪 CI/CD
+
+Every push triggers:
+
+Dependency installation
+
+Unit tests
+
+RAG pipeline validation
+
+
+Ensures reliability, reproducibility, and safety.
+
+
+
+
+🎯 Why TransformerForge Matters
+
+This repository demonstrates:
+
+LLM systems engineering, not prompt hacking
+
+Grounded generation with RAG
+
+Enterprise-style orchestration
+
+Production-ready AI infrastructure
+
+
+It aligns directly with expectations for:
+
+Big Tech AI/ML Interns
+
+LLM Platform Engineers
+
+Applied AI Graduate Programs
 
 
 
 
 
+🚀 Future Enhancements
 
-# TransformerForge
-TransformerForge is a full-stack, multi-language platform for rapidly fine-tuning, serving, and A/B-evaluating state-of-the-art Transformer models (e.g., Llama 3, GPT-J, Mistral) on summarization and RAG workloads.
+RAG evaluation harness (precision@k)
 
-![image](https://github.com/user-attachments/assets/86d85de3-93a1-477f-9113-40f85512a1a2)
+Multi-agent Llama orchestration
+
+Model performance regression alerts
+
+Streaming responses
+
+Vector store persistence
+
+
+
+
+
+📜 License
+
+MIT
